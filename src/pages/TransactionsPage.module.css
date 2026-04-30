@@ -1,0 +1,23 @@
+/* src/pages/TransactionsPage.module.css */
+
+.th {
+    padding: 0;
+}
+
+.control {
+    width: 100%;
+    padding: var(--mantine-spacing-xs) var(--mantine-spacing-md);
+    color: var(--mantine-color-dark-0);
+    border-radius: var(--mantine-radius-sm);
+}
+
+.control:hover {
+    background-color: var(--mantine-color-dark-6);
+}
+
+.icon {
+    width: 21px;
+    height: 21px;
+    border-radius: 21px;
+    color: var(--mantine-color-dimmed);
+}

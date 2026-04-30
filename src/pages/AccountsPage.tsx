@@ -32,6 +32,7 @@ type Account = {
     accountName: string;
     accountType: string;
     openingBalance: number;
+    currentBalance: number;
     currencyCode: string;
     isActive: boolean;
     createdAt: string;
@@ -102,7 +103,7 @@ export function AccountsPage() {
     }
 
     async function refreshAccounts() {
-        const response = await apiFetch('/accounts');
+        const response = await apiFetch('/transactions/accounts-with-balances');
 
         if (!response.ok) {
             throw new Error('Failed to load accounts');
@@ -143,7 +144,7 @@ export function AccountsPage() {
         void loadAccounts();
     }, []);
 
-    const hasNegativeBalance = accounts.some((account) => account.openingBalance < 0);
+    const hasNegativeBalance = accounts.some((account) => account.currentBalance < 0);
 
     return (
         <Stack gap="xl">
@@ -316,7 +317,7 @@ export function AccountsPage() {
 
                                         <Group gap="sm">
                                             <Text fw={700}>
-                                                {account.openingBalance.toLocaleString('en-US', {
+                                                {account.currentBalance.toLocaleString('en-US', {
                                                     style: 'currency',
                                                     currency: account.currencyCode,
                                                 })}
