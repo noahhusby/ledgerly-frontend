@@ -1,13 +1,8 @@
-import { useState } from 'react';
 import {
-    IconCalendarStats,
-    IconDeviceDesktopAnalytics,
-    IconFingerprint,
-    IconGauge,
+    IconBellDollar,
+    IconBuildingBank,
     IconHome2,
-    IconLogout,
-    IconSettings,
-    IconUser,
+    IconLogout, IconReceiptDollar,
 } from '@tabler/icons-react';
 import { Center, Stack, Tooltip, UnstyledButton } from '@mantine/core';
 import { MantineLogo } from '@mantinex/mantine-logo';
@@ -37,27 +32,25 @@ function NavbarLink({ icon: Icon, label, active, onClick }: NavbarLinkProps) {
 
 const mockdata = [
     { icon: IconHome2, label: 'Home' },
-    { icon: IconGauge, label: 'Dashboard' },
-    { icon: IconDeviceDesktopAnalytics, label: 'Analytics' },
-    { icon: IconCalendarStats, label: 'Releases' },
-    { icon: IconUser, label: 'Account' },
-    { icon: IconFingerprint, label: 'Security' },
-    { icon: IconSettings, label: 'Settings' },
+    { icon: IconBuildingBank, label: 'Accounts' },
+    { icon: IconReceiptDollar, label: 'Transactions' },
+    { icon: IconBellDollar, label: 'Budgets' },
 ];
 
+export type Page = 'Home' | 'Accounts' | 'Transactions' | 'Budgets';
 interface NavbarMinimalProps {
+    activePage: Page;
+    onPageChange: (page: Page) => void;
     onLogout: () => void;
 }
 
-export function NavbarMinimal({onLogout}: NavbarMinimalProps) {
-    const [active, setActive] = useState(2);
-
-    const links = mockdata.map((link, index) => (
+export function NavbarMinimal({activePage, onPageChange, onLogout}: NavbarMinimalProps) {
+    const links = mockdata.map((link, _) => (
         <NavbarLink
             {...link}
             key={link.label}
-            active={index === active}
-            onClick={() => setActive(index)}
+            active={link.label === activePage}
+            onClick={() => onPageChange(link.label as Page)}
         />
     ));
 
