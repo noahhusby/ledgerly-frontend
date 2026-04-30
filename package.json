@@ -15,6 +15,7 @@
     "@mantine/dates": "^9.1.1",
     "@mantine/form": "^9.1.1",
     "@mantine/hooks": "^9.1.1",
+    "@mantine/notifications": "^9.1.1",
     "@mantinex/mantine-logo": "^2.0.0",
     "@tabler/icons-react": "^3.41.1",
     "dayjs": "^1.11.20",

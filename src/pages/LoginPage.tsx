@@ -2,6 +2,7 @@
 import {Box, Button, Paper, PasswordInput, Stack, TextInput, Title} from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { setToken } from '../auth';
+import {notifications} from "@mantine/notifications";
 
 type LoginPageProps = {
     onLogin: (token: string) => void;
@@ -16,21 +17,34 @@ export function LoginPage({ onLogin }: LoginPageProps) {
     });
 
     async function handleSubmit(values: typeof form.values) {
-        console.log('Submit clicked', values);
-        const response = await fetch('http://127.0.0.1:3000/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(values),
-        });
+        try {
+            const response = await fetch('http://127.0.0.1:3000/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(values),
+            });
 
-        if (!response.ok) {
-            throw new Error('Login failed');
+            if (!response.ok) {
+                throw new Error('Login failed');
+            }
+
+            const data: { accessToken: string } = await response.json();
+
+            setToken(data.accessToken);
+            onLogin(data.accessToken);
+            notifications.show({
+                title: 'Success',
+                message: 'Logged in successfully',
+                color: 'green',
+            });
+        } catch (err) {
+            console.log("Time for error!");
+            notifications.show({
+                title: 'Login failed',
+                message: 'Invalid email or password',
+                color: 'red',
+            });
         }
-
-        const data: { accessToken: string } = await response.json();
-
-        setToken(data.accessToken);
-        onLogin(data.accessToken);
     }
 
     return (
