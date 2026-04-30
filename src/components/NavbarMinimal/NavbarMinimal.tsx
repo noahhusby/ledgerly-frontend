@@ -46,7 +46,11 @@ const mockdata = [
     { icon: IconSettings, label: 'Settings' },
 ];
 
-export function NavbarMinimal() {
+interface NavbarMinimalProps {
+    onLogout: () => void;
+}
+
+export function NavbarMinimal({onLogout}: NavbarMinimalProps) {
     const [active, setActive] = useState(2);
 
     const links = mockdata.map((link, index) => (
@@ -72,7 +76,7 @@ export function NavbarMinimal() {
 
             <Stack justify="center" gap={0}>
                 <NavbarLink icon={IconSwitchHorizontal} label="Change account" />
-                <NavbarLink icon={IconLogout} label="Logout" />
+                <NavbarLink icon={IconLogout} label="Logout" onClick={onLogout}/>
             </Stack>
         </nav>
     );
