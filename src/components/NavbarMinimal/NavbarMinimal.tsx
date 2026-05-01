@@ -26,6 +26,10 @@ interface NavbarMinimalProps {
     activePage: Page;
     onPageChange: (page: Page) => void;
     onLogout: () => void;
+    user: {
+        name: string;
+        email: string;
+    };
 }
 
 function NavbarLink({
@@ -58,6 +62,7 @@ export function NavbarMinimal({
                                   activePage,
                                   onPageChange,
                                   onLogout,
+    user,
                               }: NavbarMinimalProps) {
     return (
         <nav className={classes.navbar}>
@@ -83,8 +88,8 @@ export function NavbarMinimal({
 
             <div className={classes.footer}>
                 <UserButton
-                    name="Noah Husby"
-                    email="noah@example.com"
+                    name={user.name}
+                    email={user.email}
                     onClick={onLogout}
                 />
             </div>
