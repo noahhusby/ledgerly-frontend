@@ -1,0 +1,8 @@
+.card {
+    padding: var(--mantine-spacing-xl);
+}
+
+.title {
+    font-family: Outfit, var(--mantine-font-family);
+    line-height: 1.2;
+}

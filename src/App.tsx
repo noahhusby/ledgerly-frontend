@@ -25,7 +25,7 @@ function App() {
     function renderPage() {
         switch (activePage) {
             case 'Home':
-                return <HomePage />;
+                return <HomePage onPageChange={setActivePage} />;
             case 'Accounts':
                 return <AccountsPage />;
             case 'Transactions':
