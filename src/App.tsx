@@ -1,15 +1,14 @@
-import '@mantine/core/styles.css';
-
-import {NavbarMinimal, type Page} from "./components/NavbarMinimal/NavbarMinimal.tsx";
-import {useEffect, useState} from "react";
-import {clearToken, getToken} from "./auth.ts";
-import {Box} from "@mantine/core";
-import {LoginPage} from "./pages/LoginPage.tsx";
-import {HomePage} from "./pages/HomePage.tsx";
-import {AccountsPage} from "./pages/AccountsPage.tsx";
-import {TransactionsPage} from "./pages/TransactionsPage.tsx";
-import {BudgetsPage} from "./pages/BudgetsPage.tsx";
-import {apiFetch} from "./api.ts";
+// App.tsx
+import { useEffect, useState } from 'react';
+import { Box } from '@mantine/core';
+import { NavbarMinimal, type Page } from './components/NavbarMinimal/NavbarMinimal';
+import { LoginPage } from './pages/LoginPage';
+import { HomePage } from './pages/HomePage';
+import { AccountsPage } from './pages/AccountsPage';
+import { TransactionsPage } from './pages/TransactionsPage';
+import { BudgetsPage } from './pages/BudgetsPage';
+import { clearToken, getToken } from './auth';
+import { apiFetch } from './api';
 
 type CurrentUser = {
     userId: string;
@@ -19,15 +18,9 @@ type CurrentUser = {
 };
 
 function App() {
-    console.log('App render');
-
     const [token, setTokenState] = useState<string | null>(getToken());
     const [activePage, setActivePage] = useState<Page>('Home');
     const [currentUser, setCurrentUser] = useState<CurrentUser | null>(null);
-
-    if(!token) {
-        return <LoginPage onLogin={setTokenState} />;
-    }
 
     useEffect(() => {
         async function loadCurrentUser() {
@@ -36,14 +29,20 @@ function App() {
                 return;
             }
 
-            const response = await apiFetch('/users');
+            try {
+                const response = await apiFetch('/users');
 
-            if (!response.ok) {
-                return;
+                if (!response.ok) {
+                    throw new Error('Failed to load user');
+                }
+
+                const data = (await response.json()) as CurrentUser;
+                setCurrentUser(data);
+            } catch {
+                clearToken();
+                setTokenState(null);
+                setCurrentUser(null);
             }
-
-            const data = (await response.json()) as CurrentUser;
-            setCurrentUser(data);
         }
 
         void loadCurrentUser();
@@ -62,6 +61,10 @@ function App() {
         }
     }
 
+    if (!token) {
+        return <LoginPage onLogin={setTokenState} />;
+    }
+
     return (
         <Box style={{ display: 'flex', height: '100vh', width: '100%' }}>
             <NavbarMinimal
@@ -71,18 +74,14 @@ function App() {
                     clearToken();
                     setTokenState(null);
                     setCurrentUser(null);
+                    setActivePage('Home');
                 }}
-                user={
-                    currentUser
-                        ? {
-                            name: `${currentUser.firstName} ${currentUser.lastName}`,
-                            email: currentUser.email,
-                        }
-                        : {
-                            name: 'Ledgerly User',
-                            email: '',
-                        }
-                }
+                user={{
+                    name: currentUser
+                        ? `${currentUser.firstName} ${currentUser.lastName}`
+                        : 'Loading...',
+                    email: currentUser?.email ?? '',
+                }}
             />
 
             <Box
